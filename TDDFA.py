@@ -55,7 +55,6 @@ class TDDFA(object):
             size=self.size,
             mode=kvs.get('mode', 'small')
         )
-        print(model)
         model = load_model(model, kvs.get('checkpoint_fp'))
 
         if self.gpu_mode:
