@@ -48,6 +48,6 @@ def main(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='The analysis of 3DDFA_V2')
-    parser.add_argument('-c', '--csv', type=str, default='test_data/inputs/videos/Alex_bad_light_mb1.csv')
+    parser.add_argument('-c', '--csv', type=str, default='test_data/results/videos/Alex_bad_light_mb1.csv')
     args = parser.parse_args()
     main(args)
