@@ -43,14 +43,14 @@ def main(args):
     img = cv2.imread(args.img_fp)
 
     # Detect faces, get 3DMM params and roi boxes
-    boxes = face_boxes(img)
+    boxes, _ = face_boxes(img)
     n = len(boxes)
     if n == 0:
         print(f'No face detected, exit')
         sys.exit(-1)
     print(f'Detect {n} faces')
 
-    param_lst, roi_box_lst = tddfa(img, boxes)
+    param_lst, roi_box_lst, _ = tddfa(img, boxes)
 
     # Visualization and serialization
     dense_flag = args.opt in ('2d_dense', '3d', 'depth', 'pncc', 'uv_tex', 'ply', 'obj')
@@ -62,7 +62,10 @@ def main(args):
     ver_lst = tddfa.recon_vers(param_lst, roi_box_lst, dense_flag=dense_flag)
 
     if args.opt == '2d_sparse':
-        draw_landmarks(img, ver_lst, show_flag=args.show_flag, dense_flag=dense_flag, wfp=wfp)
+        pts = draw_landmarks(img, ver_lst, show_flag=args.show_flag, dense_flag=dense_flag, wfp=wfp)
+        print(pts[0][0, :])
+        print(pts[0][1, :])
+        print(pts[0][2, :])
     elif args.opt == '2d_dense':
         draw_landmarks(img, ver_lst, show_flag=args.show_flag, dense_flag=dense_flag, wfp=wfp)
     elif args.opt == '3d':

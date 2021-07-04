@@ -110,7 +110,6 @@ def main(args):
             queue_ver.popleft()
             queue_frame.popleft()
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='The smooth demo of webcam of 3DDFA_V2')
     parser.add_argument('-c', '--config', type=str, default='configs/mb1_120x120.yml')

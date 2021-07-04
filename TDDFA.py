@@ -28,6 +28,7 @@ class TDDFA(object):
     """TDDFA: named Three-D Dense Face Alignment (TDDFA)"""
 
     def __init__(self, **kvs):
+        print(kvs)
         torch.set_grad_enabled(False)
 
         # load BFM
@@ -54,6 +55,7 @@ class TDDFA(object):
             size=self.size,
             mode=kvs.get('mode', 'small')
         )
+        print(model)
         model = load_model(model, kvs.get('checkpoint_fp'))
 
         if self.gpu_mode:
@@ -106,20 +108,22 @@ class TDDFA(object):
             if self.gpu_mode:
                 inp = inp.cuda(device=self.gpu_id)
 
-            if kvs.get('timer_flag', False):
-                end = time.time()
-                param = self.model(inp)
-                elapse = f'Inference: {(time.time() - end) * 1000:.1f}ms'
-                print(elapse)
-            else:
-                param = self.model(inp)
+            end = time.time()
+            param = self.model(inp)
+            elapse = (time.time() - end) * 1000
+            # if kvs.get('timer_flag', False):
+            #     end = time.time()
+            #     param = self.model(inp)
+            #     elapse = f'Inference: {(time.time() - end) * 1000:.1f}ms'
+            #     print(elapse)
+            # else:
+            #     param = self.model(inp)
 
             param = param.squeeze().cpu().numpy().flatten().astype(np.float32)
             param = param * self.param_std + self.param_mean  # re-scale
-            # print('output', param)
             param_lst.append(param)
 
-        return param_lst, roi_box_lst
+        return param_lst, roi_box_lst, elapse
 
     def recon_vers(self, param_lst, roi_box_lst, **kvs):
         dense_flag = kvs.get('dense_flag', False)

@@ -16,6 +16,8 @@ from utils.tddfa_util import _parse_param, similar_transform
 from bfm.bfm import BFMModel
 from bfm.bfm_onnx import convert_bfm_to_onnx
 
+import time
+
 make_abs_path = lambda fn: osp.join(osp.dirname(osp.realpath(__file__)), fn)
 
 
@@ -88,12 +90,15 @@ class TDDFA_ONNX(object):
 
             inp_dct = {'input': img}
 
+            end = time.time()
             param = self.session.run(None, inp_dct)[0]
+            elapse = (time.time() - end) * 1000
+
             param = param.flatten().astype(np.float32)
             param = param * self.param_std + self.param_mean  # re-scale
             param_lst.append(param)
 
-        return param_lst, roi_box_lst
+        return param_lst, roi_box_lst, elapse
 
     def recon_vers(self, param_lst, roi_box_lst, **kvs):
         dense_flag = kvs.get('dense_flag', False)
