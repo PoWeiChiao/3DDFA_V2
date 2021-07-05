@@ -28,7 +28,6 @@ class TDDFA(object):
     """TDDFA: named Three-D Dense Face Alignment (TDDFA)"""
 
     def __init__(self, **kvs):
-        print(kvs)
         torch.set_grad_enabled(False)
 
         # load BFM
